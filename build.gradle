@@ -1,0 +1,47 @@
+plugins {
+    id 'java'
+}
+
+group = 'kelso.hungeralert'
+version = '1.0.0'
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CONFIGURE THIS: point to your Necesse game JAR.
+// Typical Steam path on Windows:
+//   C:/Program Files (x86)/Steam/steamapps/common/Necesse/Necesse.jar
+// ─────────────────────────────────────────────────────────────────────────────
+def gameDirectory = 'C:/Program Files (x86)/Steam/steamapps/common/Necesse'
+def nesesseJar = file("${gameDirectory}/Necesse.jar")
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Necesse game JAR — provides all necesse.* classes
+    compileOnly files(nesesseJar)
+
+    // LWJGL and other game libs (provides org.lwjgl.opengl.GL11, etc.)
+    compileOnly fileTree(dir: "${gameDirectory}/lib", include: ['*.jar'])
+
+    // Byte Buddy — needed for the @Advice patch annotations
+    compileOnly 'net.bytebuddy:byte-buddy:1.14.9'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+sourceSets {
+    main {
+        java   { srcDirs = ['src/main/java'] }
+        resources { srcDirs = ['src/main/resources'] }
+    }
+}
+
+jar {
+    archiveFileName = 'HungerAlert-1.1.1-1.0.0.jar'
+    destinationDirectory = file("$projectDir/build/output")
+    from sourceSets.main.output
+}

@@ -1,0 +1,47 @@
+========================================
+  HungerAlert Mod — Build Instructions
+========================================
+
+WHAT THE MOD DOES
+------------------
+When your hunger bar drops below 10%, a pulsing red border appears around the
+edges of the screen. The border fades in and out (roughly every 800 ms) so it
+catches your eye without being distracting when you're not starving.
+
+The mod is clientside-only — servers do not need it installed.
+
+REQUIREMENTS
+------------
+- Java JDK 11 or higher (not just JRE)
+  Download: https://adoptium.net/
+- Gradle
+  Download: https://gradle.org/install/
+
+STEP 1 — Set your Necesse game path
+-------------------------------------
+Open build.gradle and update this line to your game's actual install path:
+
+  def gameDirectory = 'C:/Program Files (x86)/Steam/steamapps/common/Necesse'
+
+Common locations:
+  Steam default : C:/Program Files (x86)/Steam/steamapps/common/Necesse
+  GOG           : C:/GOG Games/Necesse
+
+STEP 2 — Build the mod
+------------------------
+Open a Command Prompt in the HungerAlert folder and run:
+
+  gradle jar
+
+The compiled mod JAR appears at:
+  build/output/HungerAlert-1.1.1-1.0.0.jar
+
+STEP 3 — Install the mod
+--------------------------
+Copy HungerAlert-1.1.1-1.0.0.jar to your Necesse mods folder:
+  %APPDATA%\Necesse\mods\
+
+STEP 4 — Play
+--------------
+Enable HungerAlert in the mod menu, load a world, and let your hunger drop.
+Once it falls below 10% you will see the red pulsing border.
