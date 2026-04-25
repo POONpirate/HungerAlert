@@ -41,7 +41,7 @@ sourceSets {
 }
 
 jar {
-    archiveFileName = 'HungerAlert-1.1.1-1.0.0.jar'
+    archiveFileName = 'HungerAlert-1.2.0-1.0.0.jar'
     destinationDirectory = file("$projectDir/build/output")
     from sourceSets.main.output
 }

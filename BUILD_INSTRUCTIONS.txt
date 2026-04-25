@@ -34,11 +34,11 @@ Open a Command Prompt in the HungerAlert folder and run:
   gradle jar
 
 The compiled mod JAR appears at:
-  build/output/HungerAlert-1.1.1-1.0.0.jar
+  build/output/HungerAlert-1.2.0-1.0.0.jar
 
 STEP 3 — Install the mod
 --------------------------
-Copy HungerAlert-1.1.1-1.0.0.jar to your Necesse mods folder:
+Copy HungerAlert-1.2.0-1.0.0.jar to your Necesse mods folder:
   %APPDATA%\Necesse\mods\
 
 STEP 4 — Play

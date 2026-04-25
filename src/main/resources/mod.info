@@ -2,7 +2,7 @@
 	id = kelso.hungeralert,
 	name = HungerAlert,
 	version = 1.0.0,
-	gameVersion = 1.1.1,
+	gameVersion = 1.2.0,
 	author = Kelso,
 	description = Draws a pulsing red screen border when hunger drops below 10%.,
 	clientside = true

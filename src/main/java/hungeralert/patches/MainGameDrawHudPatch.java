@@ -25,7 +25,7 @@ public class MainGameDrawHudPatch {
      * Vignette reach as a fraction of screen height (top/bottom)
      * and screen width (left/right).  0.40 = 40 % from each edge.
      */
-    private static final float VIG_H_FRAC = 0.40f;
+    private static final float VIG_H_FRAC = 0.10f;
 
     /** Throttle debug logging to once every 5 seconds. Must be public — advice is inlined into MainGame. */
     public static long lastDebugLog = 0;
