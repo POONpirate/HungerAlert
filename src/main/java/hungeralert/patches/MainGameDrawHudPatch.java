@@ -21,8 +21,11 @@ public class MainGameDrawHudPatch {
     /** Trigger threshold — 10% of the 0–100 hunger scale. */
     private static final float HUNGER_WARNING_LEVEL = 10.0f;
 
-    /** Border thickness in HUD pixels. */
-    private static final int BORDER = 50;
+    /**
+     * Vignette reach as a fraction of screen height (top/bottom)
+     * and screen width (left/right).  0.40 = 40 % from each edge.
+     */
+    private static final float VIG_H_FRAC = 0.40f;
 
     /** Throttle debug logging to once every 5 seconds. Must be public — advice is inlined into MainGame. */
     public static long lastDebugLog = 0;
@@ -62,7 +65,7 @@ public class MainGameDrawHudPatch {
             // ── 4. Calculate pulsing alpha (~800 ms period) ──────────────────
             long  now   = System.currentTimeMillis();
             float pulse = (float) (Math.sin(now / 400.0) * 0.5 + 0.5); // 0.0–1.0
-            float alpha = 0.25f + 0.35f * pulse;                        // 0.25–0.60
+            float alpha = 0.40f + 0.40f * pulse;                        // 0.40–0.80
 
             // ── 5. Get current viewport dimensions ───────────────────────────
             int[] vp = new int[4];
@@ -83,34 +86,28 @@ public class MainGameDrawHudPatch {
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
             GL11.glDisable(GL11.GL_TEXTURE_2D);
-            GL11.glColor4f(0.85f, 0.05f, 0.05f, alpha);
 
-            // ── 8. Draw the four border quads ────────────────────────────────
+            // ── 8. Draw gradient vignette — red at edges, transparent inward ─
+            //   vigH/vigW are how far the gradient reaches from each edge.
+            //   Each quad uses per-vertex colour so GL interpolates smoothly.
+            //   Left/right strips are clamped to [vigH, h-vigH] so the four
+            //   corner regions are handled exclusively by the top/bottom strips.
+            float vigH = h * VIG_H_FRAC;
+            float r = 0.90f, g = 0.0f, b = 0.0f;
+
             GL11.glBegin(GL11.GL_QUADS);
 
-            // Top strip
-            GL11.glVertex2f(0,          0);
-            GL11.glVertex2f(w,          0);
-            GL11.glVertex2f(w,          BORDER);
-            GL11.glVertex2f(0,          BORDER);
+            // Top strip  (full width, red→transparent downward)
+            GL11.glColor4f(r, g, b, alpha); GL11.glVertex2f(0, 0);
+            GL11.glColor4f(r, g, b, alpha); GL11.glVertex2f(w, 0);
+            GL11.glColor4f(r, g, b, 0.0f);  GL11.glVertex2f(w, vigH);
+            GL11.glColor4f(r, g, b, 0.0f);  GL11.glVertex2f(0, vigH);
 
-            // Bottom strip
-            GL11.glVertex2f(0,          h - BORDER);
-            GL11.glVertex2f(w,          h - BORDER);
-            GL11.glVertex2f(w,          h);
-            GL11.glVertex2f(0,          h);
-
-            // Left strip
-            GL11.glVertex2f(0,          BORDER);
-            GL11.glVertex2f(BORDER,     BORDER);
-            GL11.glVertex2f(BORDER,     h - BORDER);
-            GL11.glVertex2f(0,          h - BORDER);
-
-            // Right strip
-            GL11.glVertex2f(w - BORDER, BORDER);
-            GL11.glVertex2f(w,          BORDER);
-            GL11.glVertex2f(w,          h - BORDER);
-            GL11.glVertex2f(w - BORDER, h - BORDER);
+            // Bottom strip  (full width, transparent→red downward)
+            GL11.glColor4f(r, g, b, 0.0f);  GL11.glVertex2f(0, h - vigH);
+            GL11.glColor4f(r, g, b, 0.0f);  GL11.glVertex2f(w, h - vigH);
+            GL11.glColor4f(r, g, b, alpha); GL11.glVertex2f(w, h);
+            GL11.glColor4f(r, g, b, alpha); GL11.glVertex2f(0, h);
 
             GL11.glEnd();
 
